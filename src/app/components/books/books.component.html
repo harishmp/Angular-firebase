@@ -1,0 +1,95 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <input type="search" class="form-control" placeholder="Search book/author" [(ngModel)]="searchkey">
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModalAdd" (click)="onClickOpenPopup(null, true)">Add book</button>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-3 shadow ml-2 mb-5 bg-white rounded" *ngFor="let item of items | pipe:searchkey; let i=index;">
+            <img src={{item.cover_url}} alt="image" style="width: 100%;max-width: 260px;" >
+            <button type="button" class="btn btn-danger" (click)="onDelete(item, i)" style="margin: 5px 0px;">Delete</button>
+            <button type="button" class="btn btn-info" (click)="onClickOpenPopup(item, false)" data-toggle="modal" data-target="#myModalView" style="margin: 5px 0px;float: right;">View</button>
+            <button type="button" class="btn btn-success" (click)="onClickOpenPopup(item, false)" data-toggle="modal" data-target="#myModalAdd" style="margin: 5px 2px 2px;float: right;">Update</button>
+        </div>
+    </div>
+</div>
+
+  <!-- Modal -->
+<div class="modal fade" id="myModalView" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" *ngIf="BookDetail">
+        <div class="modal-header">
+            <h4 class="modal-title">{{BookDetail['title']}}</h4>
+          <button type="button" class="close" data-dismiss="modal" (click)="clearData()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+              <div class="col-md-6">
+                <img src={{BookDetail.cover_url}} alt="image" style="max-width: 200px;" >
+              </div>
+              <div class="col-md-6">
+                <p>{{BookDetail['author']}}</p>
+                <p>{{BookDetail['description']}}</p>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clearData()">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Modal -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="myModalAdd" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" *ngIf="addorEdit">Add New Book</h4>
+            <h4 class="modal-title" *ngIf="!addorEdit">Edit Book</h4>
+          <button type="button" class="close" #closebutton data-dismiss="modal" (click)="clearData()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <form class="col-md-12" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">title</label>
+                  <input class="form-control" type="text" placeholder="title" [(ngModel)]="BookDetail['title']" name="title">
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Description</label>
+                  <input class="form-control" type="text" placeholder="description" [(ngModel)]="BookDetail.description" name="description">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">cover url</label>
+                    <input class="form-control" type="text" placeholder="cover_url" [(ngModel)]="BookDetail.cover_url" name="cover_url">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">auther</label>
+                    <!-- <input class="form-control" type="text" placeholder="author" [(ngModel)]="author" name="author"> -->
+                    <select class="form-control" [(ngModel)]="BookDetail.author" name="author">
+                        <option>Select Option</option>
+                        <option *ngFor="let item of itemsAuthors">{{item.name}}</option>
+                    </select>
+                  </div>
+                <input type="submit" value="submit" class="btn btn-primary">
+              </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clearData()">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
